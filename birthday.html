@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>How long</title>
+    <style>
+        body{
+            background: floralwhite;
+            text-align:center;
+        }
+        p{
+
+
+            font-size: 3em;
+        }
+#days,#has_days{
+    font-size: 1.5em;
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+<p>
+    <span id="year"></span>年
+    <span id="month"></span>月
+    <span id="day"></span>日
+</p>
+<p>
+    <span id="hours"></span>:
+    <span id="minute"></span>
+</p>
+
+
+<p>今天是第 <span id="days"></span> 天</p>
+<p>距离生日还有 <span id="next_birthday"></span> 天</p>
+<p>到今天已有 <span id="has_days"></span> 天大了</p>
+<p>也就是
+    <span id="years"></span>岁
+    <span id="months"></span>个月加
+    <span id="only_days"></span>天
+</p>
+
+</body>
+<script>
+    const birthday = {
+        "year": 2022,
+        "month": 3,
+        'day': 4,
+        "str": '2022-3-4',
+    }
+
+
+    console.log(birthday)
+    const date = new Date();
+    // //正式代码
+
+    const today = {
+        'year': date.getFullYear(),
+        'month': date.getMonth() + 1,
+        'day': date.getDate(),
+        hour:date.getHours(),
+        minute:date.getMinutes()
+    }
+
+    // // 测试代码
+
+    // const today = {
+    //     'year': 2023,
+    //     'month': 3,
+    //     'day': 5,
+    // }
+
+    if (today.month < birthday.month || (today.month === birthday.month && today.day <= birthday.day)) {
+        today ['next_birthday'] = today.year + '-' + birthday.month + '-' + birthday.day
+    } else {
+        today ['next_birthday'] = (today.year + 1) + '-' + birthday.month + '-' + birthday.day
+    }
+    today.str = today.year + '-' + today.month + '-' + today.day
+
+    if (today.month > 1) {
+        today.last_month_4th = today.year + '-' + (today.month - 1) + '-' + 4
+    } else {
+        today.last_month_4th = today.year - 1 + '-' + 12 + '-' + 4
+    }
+
+
+    // const getNowDate =()=>{
+
+
+    document.getElementById("year").innerHTML = today.year;
+    document.getElementById("month").innerHTML = today.month;
+    document.getElementById("day").innerHTML = today.day;
+    document.getElementById("hours").innerHTML = today.hour;
+    document.getElementById("minute").innerHTML = today.minute;
+
+
+    function DateDiff(sDate1, sDate2) {
+        console.log(sDate1, sDate2)
+        //sDate1和sDate2是2002-12-18格式
+        var aDate, oDate1, oDate2, iDays
+        aDate = sDate1.split("-")
+        oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])    //转换为12-18-2002格式
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
+        iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)    //把相差的毫秒数转换为天数
+        return iDays
+    }
+
+    const has_days = DateDiff(birthday.str, today.str)
+
+    document.getElementById("days").innerHTML = has_days + 1;
+    document.getElementById("has_days").innerHTML = has_days;
+
+    const next_birthday =DateDiff(today.str, today.next_birthday)
+    document.getElementById("next_birthday").innerHTML = next_birthday;
+    if (next_birthday==0){
+        alert('生日快乐!!!')
+    }
+
+
+    let days, months
+    if (birthday.day > today.day) {
+        days = DateDiff(today.last_month_4th, today.str)
+        today.month -= 1
+        if (today.month === 0) {
+            today.month = 12
+            today.year -= 1
+        }
+    } else {
+        days = today.day - birthday.day
+    }
+    if (birthday.month > today.month) {
+        months = today.month + 12 - birthday.month
+        today.year -= 1
+    } else {
+        months = today.month - birthday.month
+    }
+    let years = today.year - birthday.year
+
+
+    document.getElementById("years").innerHTML = years;
+    document.getElementById("months").innerHTML = months;
+    document.getElementById("only_days").innerHTML = days;
+
+</script>
+
+
+</html>
